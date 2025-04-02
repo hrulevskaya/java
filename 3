@@ -1,0 +1,15 @@
+public class n3 {
+    public static void main(String[] args) {
+        int[] mus = {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1};
+
+        int k = 0; 
+
+        for (int i = 1; i < mus.length; i++) {
+            if (mus[i] != mus[i - 1]) { 
+                k++; 
+            }
+        }
+
+        System.out.println("Количество изменений: " + count);
+    }
+}
