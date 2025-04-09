@@ -1,0 +1,135 @@
+public class Circus {
+    protected String title;
+    protected String city;
+    protected String premiereDate;
+    protected String period;
+    protected double ticketPrice;
+    protected String author;
+    protected String genre;
+    protected int actorsCount;
+
+    public Circus(String title, String city, String premiereDate, String period,
+                  double ticketPrice, String author, String genre, int actorsCount) {
+        this.title = title;
+        this.city = city;
+        this.premiereDate = premiereDate;
+        this.period = period;
+        this.ticketPrice = ticketPrice;
+        this.author = author;
+        this.genre = genre;
+        this.actorsCount = actorsCount;
+    }
+
+    @Override
+    public String toString() {
+        return "Название: " + title +
+               "\nГород: " + city +
+               "\nДата премьеры: " + premiereDate +
+               "\nПериод: " + period +
+               "\nЦена билета: " + ticketPrice +
+               "\nАвтор: " + author +
+               "\nЖанр: " + genre +
+               "\nКоличество актеров: " + actorsCount;
+    }
+}
+public class AcrobaticShow extends Circus {
+    private String acrobatType;
+    private String inventory;
+
+    public AcrobaticShow(String title, String city, String premiereDate, String period,
+                         double ticketPrice, String author, String genre, int actorsCount,
+                         String acrobatType, String inventory) {
+        super(title, city, premiereDate, period, ticketPrice, author, genre, actorsCount);
+        this.acrobatType = acrobatType;
+        this.inventory = inventory;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+               "\nТип акробатики: " + acrobatType +
+               "\nИнвентарь: " + inventory;
+    }
+}
+public class AnimalTraining extends Circus {
+    private String animalType;
+    private int animalCount;
+
+    public AnimalTraining(String title, String city, String premiereDate, String period,
+                          double ticketPrice, String author, String genre, int actorsCount,
+                          String animalType, int animalCount) {
+        super(title, city, premiereDate, period, ticketPrice, author, genre, actorsCount);
+        this.animalType = animalType;
+        this.animalCount = animalCount;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+               "\nТип дрессировки: " + animalType +
+               "\nКоличество животных: " + animalCount;
+    }
+}
+public class MagicShow extends Circus {
+    private String magicType;
+    private String inventory;
+
+    public MagicShow(String title, String city, String premiereDate, String period,
+                     double ticketPrice, String author, String genre, int actorsCount,
+                     String magicType, String inventory) {
+        super(title, city, premiereDate, period, ticketPrice, author, genre, actorsCount);
+        this.magicType = magicType;
+        this.inventory = inventory;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+               "\nВид фокуса: " + magicType +
+               "\nИнвентарь: " + inventory;
+    }
+}
+import java.util.ArrayList;
+
+public class CircusManager {
+    private ArrayList<Circus> shows = new ArrayList<>();
+
+    public void addShow(Circus show) {
+        shows.add(show);
+    }
+
+    public void printShows() {
+        for (Circus show : shows) {
+            System.out.println("=== Представление ===");
+            System.out.println(show);
+            System.out.println();
+        }
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        CircusManager manager = new CircusManager();
+
+        manager.addShow(new AcrobaticShow(
+            "Акробаты в огне", "Москва", "10.05.2025", "1 месяц",
+            1500.0, "Иванов", "Акробатика", 6,
+            "Групповая силовая", "Канаты, брусья"
+        ));
+
+        manager.addShow(new AnimalTraining(
+            "Цирк зверей", "Казань", "01.06.2025", "3 недели",
+            1300.0, "Петров", "Дрессировка", 4,
+            "Хищники", 5
+        ));
+
+        manager.addShow(new MagicShow(
+            "Иллюзии мира", "СПб", "15.06.2025", "2 недели",
+            1800.0, "Сидоров", "Фокусы", 3,
+            "Иллюзия", "Шкатулка, зеркала"
+        ));
+
+        manager.printShows();
+    }
+}
