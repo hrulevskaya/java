@@ -1,0 +1,166 @@
+import java.util.*;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class Main {
+    static ArrayList<Circus> shows = new ArrayList<>();
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    static final String FILE_NAME = "circus_shows.txt";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nМеню:");
+            System.out.println("1. Добавить представление");
+            System.out.println("2. Показать все представления");
+            System.out.println("3. Сохранить в файл");
+            System.out.println("4. Загрузить из файла");
+            System.out.println("5. Сортировка по городу");
+            System.out.println("6. Сортировка по дате премьеры");
+            System.out.println("0. Выход");
+            System.out.print("Выберите: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1: addShow(scanner); break;
+                case 2: printShows(); break;
+                case 3: saveToFile(); break;
+                case 4: loadFromFile(); break;
+                case 5:
+                    shows.sort(Comparator.comparing(Circus::getCity));
+                    System.out.println("Отсортировано по городу!");
+                    break;
+                case 6:
+                    shows.sort(Comparator.comparing(Circus::getPremiereDate));
+                    System.out.println("Отсортировано по дате премьеры!");
+                    break;
+                case 0:
+                    System.out.println("До свидания.");
+                    return;
+                default:
+                    System.out.println("Ошибка ввода.");
+            }
+        }
+    }
+
+    static void addShow(Scanner scanner) {
+        System.out.println("Тип (1 - Акробатика, 2 - Дрессировка, 3 - Фокусы): ");
+        int type = scanner.nextInt(); scanner.nextLine();
+
+        System.out.print("Название: "); String title = scanner.nextLine();
+        System.out.print("Город: "); String city = scanner.nextLine();
+        System.out.print("Дата премьеры (дд.ММ.гггг): ");
+        String dateStr = scanner.nextLine();
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+        System.out.print("Период: "); String period = scanner.nextLine();
+        System.out.print("Цена билета: "); double price = scanner.nextDouble(); scanner.nextLine();
+        System.out.print("Автор: "); String author = scanner.nextLine();
+        System.out.print("Жанр: "); String genre = scanner.nextLine();
+        System.out.print("Количество актеров: "); int actors = scanner.nextInt(); scanner.nextLine();
+
+        switch (type) {
+            case 1:
+                System.out.print("Тип акробатики: "); String atype = scanner.nextLine();
+                System.out.print("Инвентарь: "); String ainv = scanner.nextLine();
+                shows.add(new AcrobaticShow(title, city, date, period, price, author, genre, actors, atype, ainv));
+                break;
+            case 2:
+                System.out.print("Тип дрессировки: "); String dtype = scanner.nextLine();
+                System.out.print("Количество животных: "); int animals = scanner.nextInt(); scanner.nextLine();
+                shows.add(new AnimalTraining(title, city, date, period, price, author, genre, actors, dtype, animals));
+                break;
+            case 3:
+                System.out.print("Тип фокусов: "); String mtype = scanner.nextLine();
+                System.out.print("Инвентарь: "); String minv = scanner.nextLine();
+                shows.add(new MagicShow(title, city, date, period, price, author, genre, actors, mtype, minv));
+                break;
+            default:
+                System.out.println("Неизвестный тип.");
+        }
+    }
+
+    static void printShows() {
+        if (shows.isEmpty()) {
+            System.out.println("Список пуст.");
+        } else {
+            for (Circus show : shows) {
+                System.out.println(show);
+            }
+        }
+    }
+
+    static void saveToFile() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME))) {
+            for (Circus show : shows) {
+                writer.println(showToCSV(show));
+            }
+            System.out.println("Сохранено в файл " + FILE_NAME);
+        } catch (IOException e) {
+            System.out.println("Ошибка при записи файла: " + e.getMessage());
+        }
+    }
+
+    static void loadFromFile() {
+        shows.clear();
+        try (Scanner fileScanner = new Scanner(new File(FILE_NAME))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                Circus show = parseCSV(line);
+                if (show != null) shows.add(show);
+            }
+            System.out.println("Загружено " + shows.size() + " представлений из файла.");
+        } catch (IOException e) {
+            System.out.println("Ошибка при чтении файла: " + e.getMessage());
+        }
+    }
+
+    static String showToCSV(Circus show) {
+        if (show instanceof AcrobaticShow ac) {
+            return String.join(";", "Acrobatic", ac.title, ac.city, ac.premiereDate.format(formatter),
+                    ac.period, String.valueOf(ac.ticketPrice), ac.author, ac.genre,
+                    String.valueOf(ac.actorsCount), ac.acrobatType, ac.inventory);
+        } else if (show instanceof AnimalTraining an) {
+            return String.join(";", "Animal", an.title, an.city, an.premiereDate.format(formatter),
+                    an.period, String.valueOf(an.ticketPrice), an.author, an.genre,
+                    String.valueOf(an.actorsCount), an.animalType, String.valueOf(an.animalCount));
+        } else if (show instanceof MagicShow m) {
+            return String.join(";", "Magic", m.title, m.city, m.premiereDate.format(formatter),
+                    m.period, String.valueOf(m.ticketPrice), m.author, m.genre,
+                    String.valueOf(m.actorsCount), m.magicType, m.inventory);
+        }
+        return "";
+    }
+
+    static Circus parseCSV(String line) {
+        try {
+            String[] parts = line.split(";");
+            String type = parts[0];
+            String title = parts[1];
+            String city = parts[2];
+            LocalDate date = LocalDate.parse(parts[3], formatter);
+            String period = parts[4];
+            double price = Double.parseDouble(parts[5]);
+            String author = parts[6];
+            String genre = parts[7];
+            int actors = Integer.parseInt(parts[8]);
+
+            switch (type) {
+                case "Acrobatic":
+                    return new AcrobaticShow(title, city, date, period, price, author, genre, actors, parts[9], parts[10]);
+                case "Animal":
+                    return new AnimalTraining(title, city, date, period, price, author, genre, actors, parts[9], Integer.parseInt(parts[10]));
+                case "Magic":
+                    return new MagicShow(title, city, date, period, price, author, genre, actors, parts[9], parts[10]);
+                default:
+                    return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка при разборе строки: " + line);
+            return null;
+        }
+    }
+}
+
