@@ -1,15 +1,24 @@
+import java.util.Random; 
+
 public class n3 {
     public static void main(String[] args) {
-        int[] mus = {1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1};
-
+        int[] mus = nex int[16];
+        Random a = new Random(); 
         int k = 0; 
 
-        for (int i = 1; i < mus.length; i++) {
-            if (mus[i] != mus[i - 1]) { 
+        System.out.print("Массив: ");
+        for (int i = 0; i < mus.length; i++) { 
+                    mus[i] = a.nextInt(2); 
+                    System.out.print(mus[i]); 
+        }
+        System.out.println(); 
+        
+        for (int i = 0; i < mus.length-1; i++) {
+            if (mus[i] != mus[i + 1]) { 
                 k++; 
             }
         }
 
-        System.out.println("Количество изменений: " + count);
+        System.out.println("Количество изменений: " + k);
     }
 }
