@@ -1,0 +1,173 @@
+import java.util.*;
+
+abstract class Circus {
+    protected String title, city, premiereDate, period, author, genre;
+    protected double ticketPrice;
+    protected int actorsCount;
+
+    public Circus(String title, String city, String premiereDate, String period,
+                  double ticketPrice, String author, String genre, int actorsCount) {
+        this.title = title;
+        this.city = city;
+        this.premiereDate = premiereDate;
+        this.period = period;
+        this.ticketPrice = ticketPrice;
+        this.author = author;
+        this.genre = genre;
+        this.actorsCount = actorsCount;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public abstract String toString();
+}
+
+// Акробатика
+class AcrobaticShow extends Circus {
+    private String acrobatType, inventory;
+
+    public AcrobaticShow(String title, String city, String premiereDate, String period,
+                         double ticketPrice, String author, String genre, int actorsCount,
+                         String acrobatType, String inventory) {
+        super(title, city, premiereDate, period, ticketPrice, author, genre, actorsCount);
+        this.acrobatType = acrobatType;
+        this.inventory = inventory;
+    }
+
+    @Override
+    public String toString() {
+        return "\n[Акробатика]\n" + title + " | " + city + " | " + premiereDate +
+               "\nТип: " + acrobatType + ", Инвентарь: " + inventory +
+               "\nЦена: " + ticketPrice + ", Актеров: " + actorsCount + "\n";
+    }
+}
+
+// Дрессировка
+class AnimalTraining extends Circus {
+    private String animalType;
+    private int animalCount;
+
+    public AnimalTraining(String title, String city, String premiereDate, String period,
+                          double ticketPrice, String author, String genre, int actorsCount,
+                          String animalType, int animalCount) {
+        super(title, city, premiereDate, period, ticketPrice, author, genre, actorsCount);
+        this.animalType = animalType;
+        this.animalCount = animalCount;
+    }
+
+    @Override
+    public String toString() {
+        return "\n[Дрессировка]\n" + title + " | " + city + " | " + premiereDate +
+               "\nТип: " + animalType + ", Животных: " + animalCount +
+               "\nЦена: " + ticketPrice + ", Актеров: " + actorsCount + "\n";
+    }
+}
+
+// Фокусы
+class MagicShow extends Circus {
+    private String magicType, inventory;
+
+    public MagicShow(String title, String city, String premiereDate, String period,
+                     double ticketPrice, String author, String genre, int actorsCount,
+                     String magicType, String inventory) {
+        super(title, city, premiereDate, period, ticketPrice, author, genre, actorsCount);
+        this.magicType = magicType;
+        this.inventory = inventory;
+    }
+
+    @Override
+    public String toString() {
+        return "\n[Фокусы]\n" + title + " | " + city + " | " + premiereDate +
+               "\nТип: " + magicType + ", Инвентарь: " + inventory +
+               "\nЦена: " + ticketPrice + ", Актеров: " + actorsCount + "\n";
+    }
+}
+
+// Главный класс
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Circus> shows = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\nМеню:");
+            System.out.println("1. Добавить представление");
+            System.out.println("2. Показать все представления");
+            System.out.println("3. Отсортировать по названию");
+            System.out.println("4. Отсортировать по цене");
+            System.out.println("0. Выход");
+            System.out.print("Выберите: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // очистка
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Тип (1 - Акробатика, 2 - Дрессировка, 3 - Фокусы): ");
+                    int type = scanner.nextInt(); scanner.nextLine();
+
+                    System.out.print("Название: "); String title = scanner.nextLine();
+                    System.out.print("Город: "); String city = scanner.nextLine();
+                    System.out.print("Дата премьеры: "); String date = scanner.nextLine();
+                    System.out.print("Период: "); String period = scanner.nextLine();
+                    System.out.print("Цена билета: "); double price = scanner.nextDouble(); scanner.nextLine();
+                    System.out.print("Автор: "); String author = scanner.nextLine();
+                    System.out.print("Жанр: "); String genre = scanner.nextLine();
+                    System.out.print("Количество актеров: "); int actors = scanner.nextInt(); scanner.nextLine();
+
+                    switch (type) {
+                        case 1:
+                            System.out.print("Тип акробатики: "); String atype = scanner.nextLine();
+                            System.out.print("Инвентарь: "); String ainv = scanner.nextLine();
+                            shows.add(new AcrobaticShow(title, city, date, period, price, author, genre, actors, atype, ainv));
+                            break;
+                        case 2:
+                            System.out.print("Тип дрессировки: "); String dtype = scanner.nextLine();
+                            System.out.print("Количество животных: "); int dcount = scanner.nextInt(); scanner.nextLine();
+                            shows.add(new AnimalTraining(title, city, date, period, price, author, genre, actors, dtype, dcount));
+                            break;
+                        case 3:
+                            System.out.print("Тип фокусов: "); String mtype = scanner.nextLine();
+                            System.out.print("Инвентарь: "); String minv = scanner.nextLine();
+                            shows.add(new MagicShow(title, city, date, period, price, author, genre, actors, mtype, minv));
+                            break;
+                        default:
+                            System.out.println("Неверный тип!");
+                    }
+                    break;
+
+                case 2:
+                    if (shows.isEmpty()) {
+                        System.out.println("Список пуст.");
+                    } else {
+                        for (Circus show : shows) {
+                            System.out.println(show);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    shows.sort(Comparator.comparing(Circus::getTitle));
+                    System.out.println("Отсортировано по названию!");
+                    break;
+
+                case 4:
+                    shows.sort(Comparator.comparingDouble(Circus::getTicketPrice));
+                    System.out.println("Отсортировано по цене!");
+                    break;
+
+                case 0:
+                    System.out.println("Выход из программы.");
+                    return;
+
+                default:
+                    System.out.println("Неверный выбор!");
+            }
+        }
+    }
+}
