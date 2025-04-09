@@ -1,0 +1,61 @@
+public class Circus {
+    private String title;
+    private String city;
+    private String premiereDate;
+    private String period;
+    private double ticketPrice;
+    private String author;
+    private String genre;
+    private int actorsCount;
+
+    // Конструктор
+    public Circus(String title, String city, String premiereDate, String period,
+                  double ticketPrice, String author, String genre, int actorsCount) {
+        this.title = title;
+        this.city = city;
+        this.premiereDate = premiereDate;
+        this.period = period;
+        this.ticketPrice = ticketPrice;
+        this.author = author;
+        this.genre = genre;
+        this.actorsCount = actorsCount;
+    }
+
+    // Геттеры и сеттеры
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
+
+    public String getPremiereDate() { return premiereDate; }
+    public void setPremiereDate(String premiereDate) { this.premiereDate = premiereDate; }
+
+    public String getPeriod() { return period; }
+    public void setPeriod(String period) { this.period = period; }
+
+    public double getTicketPrice() { return ticketPrice; }
+    public void setTicketPrice(double ticketPrice) { this.ticketPrice = ticketPrice; }
+
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
+
+    public String getGenre() { return genre; }
+    public void setGenre(String genre) { this.genre = genre; }
+
+    public int getActorsCount() { return actorsCount; }
+    public void setActorsCount(int actorsCount) { this.actorsCount = actorsCount; }
+
+    // Метод toString()
+     public String toString() {
+        return "Цирковое представление:\n" +
+               "Название: " + title + "\n" +
+               "Город: " + city + "\n" +
+               "Дата премьеры: " + premiereDate + "\n" +
+               "Период проведения: " + period + "\n" +
+               "Цена билета: " + ticketPrice + " руб.\n" +
+               "Автор: " + author + "\n" +
+               "Жанр: " + genre + "\n" +
+               "Количество актеров: " + actorsCount;
+    }
+}
